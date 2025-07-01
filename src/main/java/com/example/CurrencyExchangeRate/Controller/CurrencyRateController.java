@@ -19,11 +19,18 @@ public class CurrencyRateController {
     @Autowired
     private CurrencyValidationService currencyValidationService;
 
-    @GetMapping("/exchange-rate/{currency_code_from}/{currency_code_to}")
-    public ResponseEntity<BigDecimal> getExchangeRate(@PathVariable String currency_code_from, @PathVariable String currency_code_to){
+    @GetMapping("/exchange-rate/{currency_code_from}/{currency_code_to}/{amount}")
+    public ResponseEntity<BigDecimal> convertCurrency(
+        @PathVariable String currency_code_from,
+        @PathVariable String currency_code_to,
+        @PathVariable BigDecimal amount) {
+
         currencyValidationService.validateCurrencyCode(currency_code_from);
         currencyValidationService.validateCurrencyCode(currency_code_to);
-        //create a response entity with the exchange rate between the two selected currencies
-        return ResponseEntity.ok(currencyRateService.getExchangeRateByCurrencyCode(currency_code_from, currency_code_to));
+
+        BigDecimal rate = currencyRateService.getExchangeRateByCurrencyCode(currency_code_from, currency_code_to);
+        BigDecimal convertedAmount = amount.multiply(rate);
+
+        return ResponseEntity.ok(convertedAmount.setScale(2, RoundingMode.HALF_UP));
     }
 }
