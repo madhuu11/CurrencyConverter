@@ -29,5 +29,6 @@ This project was built in just **2 hours** with the help of **Microsoft Copilot*
 
 ## Running the Project Locally
 
- 1. Clone the repository
+ 1. Clone the repository : https://github.com/madhuu11/CurrencyConverter.git
  2. Build and run the app : **./mvnw spring-boot:run**
+ 3. App runs on: http://localhost:8080
