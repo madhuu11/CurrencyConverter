@@ -9,16 +9,18 @@ import java.util.Arrays;
 
 @Service
 public class CurrencyValidationServiceImpl implements CurrencyValidationService {
-
-    //define a set of allowed currencies for validation
-    private final String[] allowedCurrencies = {"USD", "INR", "EUR", "GBP", "JPY"};
+    
+    @Autowired
+    private CurrencyRepository currencyRepository;
 
     @Override
     public void validateCurrencyCode(String currency_code) {
+    	List<String> allowedCurrencies = currencyRepository.findAllCurrencyCodes();
         //check if the currency code is not present in the allowed currencies
-        if(!Arrays.asList(allowedCurrencies).contains(currency_code)){
-            //throw a illegal exception if the currency code is not present in the allowed currencies
-            throw new IllegalArgumentException("Currency code not allowed");
+        if (!allowedCurrencies.stream().anyMatch(code -> code.equalsIgnoreCase(currency_code))) {
+        	//throw a illegal exception if the currency code is not present in the allowed currencies
+            throw new IllegalArgumentException("Currency code not allowed: " + currency_code);
         }
-    }
+
+     }
 }
